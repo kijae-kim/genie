@@ -1,0 +1,14 @@
+for i in range(4):
+    site = 'https://www.genie.co.kr/chart/top200?ditc=D&ymd=20240520&hh=15&rtm=Y&pg='+str(i+1)
+    header= {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+    request = requests.get(site, headers = header)
+    soup = BeautifulSoup(request.text)
+    table = soup.find('table',{'class':'list-wrap'})
+    ranks = table.findAll('td',{'class':'number'})
+    titles = table.findAll('a',{'class':'title ellipsis'})
+    artists = table.findAll('a',{'class':'artist ellipsis'})
+    for i, (r,t,a) in enumerate(zip(ranks,titles, artists)):
+        rank = r.text.split()[0]
+        title = t.text.strip()
+        artist = a.text.strip()
+        print('{0:3s}위. {1:s} - {2:s}'.format(rank, title, artist))
